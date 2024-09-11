@@ -8,7 +8,7 @@ firebase_admin.initialize_app(cred)
 # Conectar ao Firestore
 db = firestore.client()
 
-# ------------------- CREATE -------------------
+# ------------------- CREATE  -------------------
 def create_canal(num_canal, nome, sigla):
     # Verificar se o canal já existe
     if document_exists('canal', str(num_canal)):
@@ -46,74 +46,6 @@ def create_filme(num_filme, titulo_original, titulo_brasil, ano_lancamento, pais
     print(f'Filme {titulo_original} criado com sucesso!')
     return filme_ref
 
-# ------------------- READ -------------------
-def read_canal(num_canal):
-    canal_ref = db.collection('canal').document(str(num_canal))
-    doc = canal_ref.get()
-    if doc.exists:
-        print(f'Canal encontrado: {doc.to_dict()}')
-        return doc.to_dict()
-    else:
-        print('Canal não encontrado.')
-        return None
-
-def read_filme(num_filme):
-    filme_ref = db.collection('filme').document(str(num_filme))
-    doc = filme_ref.get()
-    if doc.exists:
-        print(f'Filme encontrado: {doc.to_dict()}')
-        return doc.to_dict()
-    else:
-        print('Filme não encontrado.')
-        return None
-
-
-# ------------------- UPDATE -------------------
-def update_canal(num_canal, nome=None, sigla=None):
-    canal_ref = db.collection('canal').document(str(num_canal))
-    updates = {}
-    if nome:
-        updates['nome'] = nome
-    if sigla:
-        updates['sigla'] = sigla
-    canal_ref.update(updates)
-    print(f'Canal {num_canal} atualizado com sucesso!')
-
-def update_filme(num_filme, titulo_original=None, titulo_brasil=None, ano_lancamento=None, pais_origem=None, categoria=None, duracao=None):
-    filme_ref = db.collection('filme').document(str(num_filme))
-    updates = {}
-    if titulo_original:
-        updates['titulo_original'] = titulo_original
-    if titulo_brasil:
-        updates['titulo_brasil'] = titulo_brasil
-    if ano_lancamento:
-        updates['ano_lancamento'] = ano_lancamento
-    if pais_origem:
-        updates['pais_origem'] = pais_origem
-    if categoria:
-        updates['categoria'] = categoria
-    if duracao:
-        updates['duracao'] = duracao
-    filme_ref.update(updates)
-    print(f'Filme {num_filme} atualizado com sucesso!')
-
-# ------------------- DELETE -------------------
-def delete_canal(num_canal):
-    canal_ref = db.collection('canal').document(str(num_canal))
-    canal_ref.delete()
-    print(f'Canal {num_canal} deletado com sucesso!')
-
-def delete_filme(num_filme):
-    filme_ref = db.collection('filme').document(str(num_filme))
-    filme_ref.delete()
-    print(f'Filme {num_filme} deletado com sucesso!')
-
-# Função auxiliar para verificar se um documento existe
-def document_exists(collection, doc_id):
-    doc_ref = db.collection(collection).document(doc_id)
-    return doc_ref.get().exists
-
-# ------------------- EXIBIÇÃO -------------------
 def create_exibicao(num_filme, num_canal, data):
     # Verificar integridade: se o filme e o canal existem
     if not document_exists('filme', str(num_filme)):
@@ -146,8 +78,27 @@ def create_exibicao(num_filme, num_canal, data):
     print(f'Exibição do filme {num_filme} no canal {num_canal} na data {data} criada com sucesso!')
     return exibicao_ref
 
-
 # ------------------- READ -------------------
+def read_canal(num_canal):
+    canal_ref = db.collection('canal').document(str(num_canal))
+    doc = canal_ref.get()
+    if doc.exists:
+        print(f'Canal encontrado: {doc.to_dict()}')
+        return doc.to_dict()
+    else:
+        print('Canal não encontrado.')
+        return None
+
+def read_filme(num_filme):
+    filme_ref = db.collection('filme').document(str(num_filme))
+    doc = filme_ref.get()
+    if doc.exists:
+        print(f'Filme encontrado: {doc.to_dict()}')
+        return doc.to_dict()
+    else:
+        print('Filme não encontrado.')
+        return None
+
 def read_exibicao(num_filme, num_canal):
     # Verificar integridade: se o filme e o canal existem
     if not document_exists('filme', str(num_filme)):
@@ -186,7 +137,36 @@ def read_exibicao(num_filme, num_canal):
 
     return exibicoes
 
+
 # ------------------- UPDATE -------------------
+def update_canal(num_canal, nome=None, sigla=None):
+    canal_ref = db.collection('canal').document(str(num_canal))
+    updates = {}
+    if nome:
+        updates['nome'] = nome
+    if sigla:
+        updates['sigla'] = sigla
+    canal_ref.update(updates)
+    print(f'Canal {num_canal} atualizado com sucesso!')
+
+def update_filme(num_filme, titulo_original=None, titulo_brasil=None, ano_lancamento=None, pais_origem=None, categoria=None, duracao=None):
+    filme_ref = db.collection('filme').document(str(num_filme))
+    updates = {}
+    if titulo_original:
+        updates['titulo_original'] = titulo_original
+    if titulo_brasil:
+        updates['titulo_brasil'] = titulo_brasil
+    if ano_lancamento:
+        updates['ano_lancamento'] = ano_lancamento
+    if pais_origem:
+        updates['pais_origem'] = pais_origem
+    if categoria:
+        updates['categoria'] = categoria
+    if duracao:
+        updates['duracao'] = duracao
+    filme_ref.update(updates)
+    print(f'Filme {num_filme} atualizado com sucesso!')
+
 def update_exibicao(num_filme, num_canal, data, nova_data=None):
     # Verificar integridade: se o filme e o canal existem
     if not document_exists('filme', str(num_filme)):
@@ -211,6 +191,16 @@ def update_exibicao(num_filme, num_canal, data, nova_data=None):
         print('Exibição não encontrada.')
 
 # ------------------- DELETE -------------------
+def delete_canal(num_canal):
+    canal_ref = db.collection('canal').document(str(num_canal))
+    canal_ref.delete()
+    print(f'Canal {num_canal} deletado com sucesso!')
+
+def delete_filme(num_filme):
+    filme_ref = db.collection('filme').document(str(num_filme))
+    filme_ref.delete()
+    print(f'Filme {num_filme} deletado com sucesso!')
+
 def delete_exibicao(num_filme, num_canal, data):
     # Verificar integridade: se o filme e o canal existem
     if not document_exists('filme', str(num_filme)):
@@ -231,6 +221,10 @@ def delete_exibicao(num_filme, num_canal, data):
     else:
         print('Exibição não encontrada.')
 
+# Função auxiliar para verificar se um documento existe
+def document_exists(collection, doc_id):
+    doc_ref = db.collection(collection).document(doc_id)
+    return doc_ref.get().exists
 
 # Criar canal, filme e exibição
 create_canal(1, "Canal Exemplo", "CEX")
